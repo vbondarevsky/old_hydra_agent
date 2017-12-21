@@ -10,7 +10,7 @@ def test_codecov():
         result = True
     elif is_mac():
         result = True
-    else:
+    elif is_linux():
         result = True
 
-    assert result == True
+    assert result
