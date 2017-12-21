@@ -2,8 +2,8 @@ language: python
 python:
   - "3.6"
 before_install:
-  - pip install codecov pytest
+  - pip install codecov pytest pytest-cov
 script:
-  - coverage run -m pytest
+  - py.test --cov=hydra_agent tests/
 after_success:
     codecov

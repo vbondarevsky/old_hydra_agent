@@ -1,4 +1,4 @@
-from hydra_agent.clients import settings
+from hydra_agent.config import config
 
 path = r'"C:\Program Files (x86)\1cv8\8.3.12.1002\bin\1cv8.exe"'
 is_windows = True
@@ -30,7 +30,7 @@ infobase = {
 }
 def create(infobase, template=None):
     params = []
-    params.append(settings.platform)
+    params.append(config.platform)
     params.append('createinfobase')
     params.append(connection_string(infobase))
     params.append(f"/AddToList \"{infobase['cluster']['name']}\"")
