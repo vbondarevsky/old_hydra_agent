@@ -5,5 +5,5 @@ try:
 except ImportError:
     from yaml import Loader, Dumper
 
-settings = load(open('hydra-agent2.yaml'), Loader=Loader)
+settings = load(open('hydra-agent.yaml'), Loader=Loader)
 pass

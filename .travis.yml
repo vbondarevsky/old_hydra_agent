@@ -2,8 +2,8 @@ language: python
 python:
   - "3.6"
 before_install:
-  - pip install codecov
+  - pip install codecov pytest
 script:
-  - coverage run -m unittest
+  - coverage run -m pytest
 after_success:
     codecov
