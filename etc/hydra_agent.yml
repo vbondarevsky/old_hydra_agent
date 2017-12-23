@@ -1,2 +1,4 @@
 v8:
   path: C:\Program Files\1cv8\8.3.11.2831\bin
+ring:
+  path: /opt/1C/1CE/x86_64/ring/
