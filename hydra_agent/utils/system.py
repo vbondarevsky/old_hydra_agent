@@ -1,4 +1,5 @@
 import platform
+from tempfile import NamedTemporaryFile
 
 
 def is_linux():
@@ -11,3 +12,8 @@ def is_windows():
 
 def is_mac():
     return platform.system() == 'Darwin'
+
+
+def temp_file_name():
+    with NamedTemporaryFile(delete=False) as tmp:
+        return tmp.name
