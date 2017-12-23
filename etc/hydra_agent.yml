@@ -1,1 +1,4 @@
-platform = "C:\Program Files (x86)\1cv8\8.3.12.1002\bin\"
+v8:
+  path: C:\Program Files (x86)\1cv8\8.3.12.1002\bin\
+ring:
+  path: /opt/1C/1CE/x86_64/ring/
