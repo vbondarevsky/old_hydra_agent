@@ -1,9 +1,10 @@
 from hydra_agent.ring import Ring
+from hydra_agent.utils.system import run_command
 
 
 class LicenseManager(Ring):
-    def __init__(self):
-        pass
+    def __init__(self, config):
+        super().__init__(config)
 
     """Получение лицензии из Центра лицензирования. Если параметр "pin" не установлен, то команда будет ожидать пользовательского ввода.
     
@@ -51,46 +52,50 @@ class LicenseManager(Ring):
     def activate(self, parameters):
         pass
 
-    """ring license get <параметры>
+    """ring license_manager get <параметры>
     Получение файла лицензии.
 
     Описание параметров:
-    --license <значение>
+    --license_manager <значение>
         Путь к файлу лицензии.
     --name <значение>
         Обязательный параметр Наименование лицензии.
     --path <значение>
         Путь к файлам лицензий."""
+
     def get(self, name, path="", dir=""):
         pass
 
-    """ring license info <параметры>
-    Получение информации о лицензии. Если параметр "name" не установлен, то команда будет ожидать пользовательского ввода.
+    def info(self, name, path=''):
+        """Возвращает информацию о лицензии
+
+        :param str name: Наименование лицензии
+        :param str path: Путь к файлам лицензий
+        :return str: Информация о лицензии
+        """
+        args = [self.path, 'license', 'info', '--name', name.strip()]
+        if path:
+            args.extend(['--path', path.strip()])
+        r = run_command(args)
+        return r
+
+    def list(self, path=''):
+        """Возвращает список установленных лицензий
+
+        :param str path: Путь к файлам лицензий
+        :return list: Список установленных лицензий
+        """
+        args = [self.path, 'license', 'list']
+        if path:
+            args.extend(['--path', path.strip()])
+        r = run_command(args)
+        return r.split()
+
+    """ring license_manager put <параметры>
+    Добавление файла лицензии. Если параметр "license_manager" не установлен, то команда будет ожидать пользовательского ввода.
 
     Описание параметров:
-    --name <значение>
-        Наименование лицензии. Если не указано, будет ожидаться содержимое лицензии.
-    --path <значение>
-        Путь к файлам лицензий."""
-
-    def info(self, name, path):
-        pass
-
-    """ring license list <параметры>
-    Список установленных лицензий.
-
-    Описание параметров:
-    --path <значение>
-        Путь к файлам лицензий."""
-
-    def list(self, path=""):
-        pass
-
-    """ring license put <параметры>
-    Добавление файла лицензии. Если параметр "license" не установлен, то команда будет ожидать пользовательского ввода.
-
-    Описание параметров:
-    --license <значение>
+    --license_manager <значение>
         Путь к файлу лицензии. Если не указано, будет ожидаться содержимое лицензии.
     --path <значение>
         Путь к файлам лицензий."""
@@ -98,7 +103,7 @@ class LicenseManager(Ring):
     def put(self, parameters):
         pass
 
-    """ring license remove <параметры>
+    """ring license_manager remove <параметры>
         Удаление лицензии.
     
         Описание параметров:
@@ -112,14 +117,15 @@ class LicenseManager(Ring):
     def remove(self, parameters):
         pass
 
-    """ring license validate <параметры>
-        Проверка лицензии. Если параметр "name" не установлен, то команда будет ожидать пользовательского ввода.
-    
-        Описание параметров:
-        --name <значение>
-            Наименование лицензии. Если не указано, будет ожидаться содержимое лицензии.
-        --path <значение>
-            Путь к файлам лицензий."""
+    def validate(self, name, path=''):
+        """Возвращает список установленных лицензий
 
-    def validate(self, parameters):
-        pass
+        :param str name: Наименование лицензии
+        :param str path: Путь к файлам лицензий
+        :return boolean: Результат проверки
+        """
+        args = [self.path, 'license', 'validate', '--name', name.strip()]
+        if path:
+            args.extend(['--path', path.strip()])
+        r = run_command(args)
+        return True

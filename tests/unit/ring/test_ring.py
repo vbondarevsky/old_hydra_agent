@@ -1,16 +1,21 @@
 import subprocess
-from subprocess import run
+
+from hydra_agent import ring
+from tests.unit import success_result
 
 
-def license_list():
-    run(['ring', 'license', 'list'])
+def test_version(monkeypatch):
+    def mock_result(args, stdout, stderr):
+        return success_result(args, '0.8.0-1')
+
+    monkeypatch.setattr(subprocess, 'run', mock_result)
+    assert ring.version == '0.8.0-1'
 
 
-def test_license_list(monkeypatch):
-    def mockreturn(monkeypatch):
-        return '333388056484632-8100111160\n172211456905900-800111993\n'
+def test_modules(monkeypatch):
+    def mock_result(args, stdout, stderr):
+        return success_result(
+            args, 'Доступные модули:\n\n  license_manager@0.4.0:x86_64 - Утилита для работы с лицензиями.\n\n')
 
-    monkeypatch.setattr(subprocess, 'run', mockreturn)
-
-    r = license_list()
-    assert r == '333388056484632-8100111160\n172211456905900-800111993\n'
+    monkeypatch.setattr(subprocess, 'run', mock_result)
+    assert ring.modules == [('license_manager', '0.4.0', 'x86_64', 'Утилита для работы с лицензиями.')]
