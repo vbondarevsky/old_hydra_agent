@@ -1,12 +1,12 @@
 import re
 from os.path import join
 
-from hydra_agent.utils.system import run_command
+from hydra_agent.utils.system import run_command, is_windows
 
 
 class Ring:
     def __init__(self, config):
-        self.path = join(config['ring']['path'], 'ring')
+        self.path = join(config['ring']['path'], 'ring' + '.cmd' if is_windows() else '')
 
     @property
     def version(self):
