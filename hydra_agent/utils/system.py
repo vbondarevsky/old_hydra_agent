@@ -23,4 +23,4 @@ def temp_file_name():
 
 def run_command(args):
     r = subprocess.run(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, check=True)
-    return r.stdout
+    return r.stdout.strip()
