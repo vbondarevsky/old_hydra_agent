@@ -1,5 +1,8 @@
+import os
+
 from hydra_agent.ring import Ring
 from hydra_agent.utils.system import run_command
+import hydra_agent.utils.system
 
 
 class LicenseManager(Ring):
@@ -52,19 +55,22 @@ class LicenseManager(Ring):
     def activate(self, parameters):
         pass
 
-    """ring license_manager get <параметры>
-    Получение файла лицензии.
+    def get(self, name, path=""):
+        """Возвращает файл лицензии
 
-    Описание параметров:
-    --license_manager <значение>
-        Путь к файлу лицензии.
-    --name <значение>
-        Обязательный параметр Наименование лицензии.
-    --path <значение>
-        Путь к файлам лицензий."""
-
-    def get(self, name, path="", dir=""):
-        pass
+        :param str name: Наименование лицензии
+        :param str path: Путь к файлам лицензий
+        :return bytes: Файл лицензии
+        """
+        temp_file = hydra_agent.utils.system.temp_file_name()
+        args = [self.path, 'license', 'get', '--name', name.strip(), '--license', temp_file]
+        if path:
+            args.extend(['--path', path.strip()])
+        r = run_command(args)
+        with open(temp_file, 'rb') as f:
+            lic = f.read()
+        os.remove(temp_file)
+        return lic
 
     def info(self, name, path=''):
         """Возвращает информацию о лицензии
