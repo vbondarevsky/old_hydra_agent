@@ -11,9 +11,10 @@ def test_version(monkeypatch, fake_ring):
 
 
 @pytest.mark.parametrize('out, expected', [
+    ('Доступные модули:\n\n\n', []),
     ('Доступные модули:\n\n  license_manager@0.4.0:x86_64 - Утилита для работы с лицензиями.\n\n',
      [('license_manager', '0.4.0', 'x86_64', 'Утилита для работы с лицензиями.')]),
-], ids=['license'])
+], ids=['empty', 'license'])
 def test_modules(monkeypatch, fake_ring, out, expected):
     monkeypatch.setattr(subprocess, 'run', lambda args, **kwargs: success_result(args, out))
     assert fake_ring.modules == expected
