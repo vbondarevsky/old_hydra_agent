@@ -100,17 +100,25 @@ class LicenseManager(Ring):
         r = run_command(args)
         return r.split()
 
-    """ring license_manager put <параметры>
-    Добавление файла лицензии. Если параметр "license_manager" не установлен, то команда будет ожидать пользовательского ввода.
+    def put(self, license, path=''):
+        """Добавляет файл лицензии
 
-    Описание параметров:
-    --license <значение>
-        Путь к файлу лицензии. Если не указано, будет ожидаться содержимое лицензии.
-    --path <значение>
-        Путь к файлам лицензий."""
-
-    def put(self, parameters):
-        pass
+        :param bytes license: Файл лицензии
+        :param str path: Путь к файлам лицензий
+        :return boolean: Результат добавления
+        """
+        license_file = hydra_agent.utils.system.temp_file_name()
+        with open(license_file, 'wb') as f:
+            f.write(license)
+        args = [self.path, 'license', 'put', '--license', license_file]
+        if path:
+            args.extend(['--path', path.strip()])
+        try:
+            run_command(args)
+        finally:
+            if os.path.exists(license_file):
+                os.remove(license_file)
+        return True
 
     def remove(self, name, path=''):
         """Удаляет лицензии
