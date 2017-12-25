@@ -112,19 +112,18 @@ class LicenseManager(Ring):
     def put(self, parameters):
         pass
 
-    """ring license_manager remove <параметры>
-        Удаление лицензии.
-    
-        Описание параметров:
-        --all <значение>
-            Удалить все лицензии по указанному имени.
-        --name <значение>
-            Обязательный параметр Наименование лицензии.
-        --path <значение>
-            Путь к файлам лицензий."""
+    def remove(self, name, path=''):
+        """Удаляет лицензии
 
-    def remove(self, parameters):
-        pass
+        :param str name: Наименование лицензии
+        :param str path: Путь к файлам лицензий
+        :return boolean: Результат удаления
+        """
+        args = [self.path, 'license', 'remove', '--name', name.strip(), '--all']
+        if path:
+            args.extend(['--path', path.strip()])
+        run_command(args)
+        return True
 
     def validate(self, name, path=''):
         """Возвращает список установленных лицензий
@@ -136,5 +135,5 @@ class LicenseManager(Ring):
         args = [self.path, 'license', 'validate', '--name', name.strip()]
         if path:
             args.extend(['--path', path.strip()])
-        r = run_command(args)
+        run_command(args)
         return True
