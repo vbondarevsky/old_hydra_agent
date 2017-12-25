@@ -4,7 +4,7 @@ import subprocess
 import pytest
 
 import hydra_agent.utils.system
-from tests.unit import success_result
+from tests.unit import success_result, fail_result
 
 
 @pytest.mark.parametrize('name, expected', [
@@ -18,4 +18,13 @@ def test_success(monkeypatch, fake_license_manager, name, expected):
     monkeypatch.setattr(subprocess, 'run', lambda args, **kwargs: success_result(args, 'Лицензия успешно получена.'))
     assert hashlib.md5(fake_license_manager.get(name=name)).hexdigest() == expected
 
-# TODO: добавить файлы
+
+@pytest.mark.parametrize('out, return_code, path', [
+    ('Ошибка получения файла лицензии. Лицензия не найдена\n', 1, None),
+    (('Ошибка получения списка лицензий.\nПо причине: Ошибка при работе с хранилищем лицензий.\n'
+      ' По причине: Директория не найдена: "/var/lic".\n'), 1, '/var/lic'),
+], ids=['wrong_name', 'wrong_path'])
+def test_fail(monkeypatch, fake_license_manager, out, return_code, path):
+    monkeypatch.setattr(subprocess, 'run', lambda args, **kwargs: fail_result(args, return_code, out))
+    with pytest.raises(subprocess.CalledProcessError):
+        fake_license_manager.get(name='111111111111111-1111111111', path=path)
