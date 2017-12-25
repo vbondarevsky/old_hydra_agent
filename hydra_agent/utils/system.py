@@ -22,10 +22,5 @@ def temp_file_name():
 
 
 def run_command(args):
-    r = subprocess.run(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    return_code, out, err = r.returncode, r.stdout, r.stderr
-
-    if return_code:
-        raise Exception(err.decode(getpreferredencoding()).strip())
-    else:
-        return out.decode(getpreferredencoding()).strip()
+    r = subprocess.run(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, check=True)
+    return r.stdout

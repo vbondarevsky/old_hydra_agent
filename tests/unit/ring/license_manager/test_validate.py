@@ -5,36 +5,24 @@ import pytest
 from tests.unit import success_result, fail_result
 
 
-def test_validate_success(monkeypatch, fake_license_manager):
-    def mock_result(args, stdout, stderr):
-        return success_result(args, 'Проверка лицензии "111111111111111-1111111111" выполнена успешно.\n')
-
-    monkeypatch.setattr(subprocess, 'run', mock_result)
-    assert fake_license_manager.validate(name='111111111111111-1111111111')
-
-
-def test_validate_fail(monkeypatch, fake_license_manager):
-    def mock_result(args, stdout, stderr):
-        return fail_result(
-            args,
-            1,
-            'Проверка лицензии завершилась с ошибкой. Лицензия не найдена\n')
-
-    monkeypatch.setattr(subprocess, 'run', mock_result)
-    with pytest.raises(Exception):
-        fake_license_manager.validate(name='111111111111111-1111111111')
+@pytest.mark.parametrize('out, name', [
+    ('111111111111111-1111111111', 'Проверка лицензии "111111111111111-1111111111" выполнена успешно'),
+], ids=['success'])
+def test_success(monkeypatch, fake_license_manager, out, name):
+    monkeypatch.setattr(subprocess, 'run', lambda args, **kwargs: success_result(args, out))
+    assert fake_license_manager.validate(name=name)
 
 
-def test_validate_fail_path(monkeypatch, fake_license_manager):
-    def mock_result(args, stdout, stderr):
-        return fail_result(
-            args,
-            1,
-            '\n'.join(['Ошибка получения списка лицензий.',
-                       'По причине: Ошибка при работе с хранилищем лицензий.',
-                       ' По причине: Директория не найдена: "/var/lic".',
-                       '']))
-
-    monkeypatch.setattr(subprocess, 'run', mock_result)
-    with pytest.raises(Exception):
-        fake_license_manager.validate(name='111111111111111-1111111111', path='/var/lic')
+@pytest.mark.parametrize('name, out, return_code, path', [
+    ('111111111111111-1111111111',
+     ('Ошибка получения списка лицензий.\nПо причине: Ошибка при работе с хранилищем лицензий.\n'
+      ' По причине: Директория не найдена: "/var/lic".\n'),
+     1, '/var/lic'),
+    ('111111111111111-1111111111',
+     'Проверка лицензии завершилась с ошибкой. Лицензия не найдена\n',
+     1, None)
+], ids=['wrong_path', 'license_not_found'])
+def test_fail(monkeypatch, fake_license_manager, name, out, return_code, path):
+    monkeypatch.setattr(subprocess, 'run', lambda args, **kwargs: fail_result(args, return_code, out))
+    with pytest.raises(subprocess.CalledProcessError):
+        fake_license_manager.validate(name=name, path=path)
