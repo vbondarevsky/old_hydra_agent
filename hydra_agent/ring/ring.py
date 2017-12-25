@@ -18,7 +18,8 @@ class Ring:
         p = re.compile(r'[@|:|-]')
 
         modules = []
-        for i in result.split('\n\n')[1:]:
-            r = tuple(map(str.strip, p.split(i)))
+        for i in result.split('\n')[1:]:
+            if not i.strip():
+                continue
             modules.append(tuple(map(str.strip, p.split(i))))
         return modules
