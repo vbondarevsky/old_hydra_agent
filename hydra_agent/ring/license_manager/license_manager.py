@@ -1,8 +1,8 @@
 import os
 
+import hydra_agent.utils.system
 from hydra_agent.ring import Ring
 from hydra_agent.utils.system import run_command
-import hydra_agent.utils.system
 
 
 class LicenseManager(Ring):
@@ -66,10 +66,13 @@ class LicenseManager(Ring):
         args = [self.path, 'license', 'get', '--name', name.strip(), '--license', temp_file]
         if path:
             args.extend(['--path', path.strip()])
-        r = run_command(args)
-        with open(temp_file, 'rb') as f:
-            lic = f.read()
-        os.remove(temp_file)
+        try:
+            run_command(args)
+            with open(temp_file, 'rb') as f:
+                lic = f.read()
+        finally:
+            if os.path.exists(temp_file):
+                os.remove(temp_file)
         return lic
 
     def info(self, name, path=''):
@@ -101,7 +104,7 @@ class LicenseManager(Ring):
     Добавление файла лицензии. Если параметр "license_manager" не установлен, то команда будет ожидать пользовательского ввода.
 
     Описание параметров:
-    --license_manager <значение>
+    --license <значение>
         Путь к файлу лицензии. Если не указано, будет ожидаться содержимое лицензии.
     --path <значение>
         Путь к файлам лицензий."""
