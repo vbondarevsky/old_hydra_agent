@@ -1,5 +1,6 @@
 import platform
 import subprocess
+from locale import getpreferredencoding
 from tempfile import NamedTemporaryFile
 
 
@@ -22,9 +23,9 @@ def temp_file_name():
 
 def run_command(args):
     r = subprocess.run(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    return_code, out, err = r.returncode, r.stdout.decode().strip(), r.stderr.decode().strip()
+    return_code, out, err = r.returncode, r.stdout, r.stderr
 
     if return_code:
-        raise Exception(err)
+        raise Exception(err.decode(getpreferredencoding()).strip())
     else:
-        return out
+        return out.decode(getpreferredencoding()).strip()

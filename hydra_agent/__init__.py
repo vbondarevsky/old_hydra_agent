@@ -3,9 +3,9 @@ from hydra_agent.ring import Ring
 from hydra_agent.ring.license_manager import LicenseManager
 from hydra_agent.v8 import V8
 
-config_ = Config()()
-v8 = V8(config_)
-ring = Ring(config_)
-license_manager = LicenseManager(config_)
+settings = Config()()
+v8 = V8(settings)
+ring = Ring(settings)
+license_manager = LicenseManager(settings)
 
 __version__ = '0.0.1'
