@@ -1,8 +1,13 @@
-from os.path import join
+import os.path
+from typing import Dict
+
+from hydra_agent.utils.system import run_command
 
 
 class Rac:
-    def __init__(self, config):
-        self.path = join(config['rac']['path'], 'rac')
+    def __init__(self, config: Dict):
+        self.path = os.path.join(config['rac']['path'], 'rac')
 
-# TODO: кроссплатформенное управление сервером
+    @property
+    def version(self):
+        return run_command([self.path, '--version'])
