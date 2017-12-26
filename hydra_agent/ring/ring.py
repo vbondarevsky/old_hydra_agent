@@ -1,5 +1,6 @@
+import os
+import os.path
 import re
-from os.path import join
 from typing import Dict
 
 from hydra_agent.utils.system import run_command, is_windows
@@ -7,7 +8,8 @@ from hydra_agent.utils.system import run_command, is_windows
 
 class Ring:
     def __init__(self, config: Dict):
-        self.path = join(config['ring']['path'], 'ring' + '.cmd' if is_windows() else '')
+        self.path = os.path.join(config['ring']['path'], 'ring' + '.cmd' if is_windows() else '')
+        self.java = config['ring']['java']
 
     @property
     def version(self):
@@ -24,3 +26,7 @@ class Ring:
                 continue
             modules.append(tuple(map(str.strip, p.split(i))))
         return modules
+
+    def _run_command(self, args):
+        os.environ['JAVA_HOME'] = self.java
+        return run_command(args)

@@ -3,7 +3,6 @@ from typing import List, Dict
 
 import hydra_agent.utils.system
 from hydra_agent.ring import Ring
-from hydra_agent.utils.system import run_command
 
 
 class LicenseManager(Ring):
@@ -69,7 +68,7 @@ class LicenseManager(Ring):
         if path:
             args.extend(['--path', path.strip()])
         try:
-            run_command(args)
+            self._run_command(args)
             with open(temp_file, 'rb') as f:
                 lic = f.read()
         finally:
@@ -83,7 +82,7 @@ class LicenseManager(Ring):
         args = [self.path, 'license', 'info', '--name', name.strip()]
         if path:
             args.extend(['--path', path.strip()])
-        return run_command(args)
+        return self._run_command(args)
 
     def list(self, path: str = '') -> List[str]:
         """Returns list of licenses"""
@@ -91,7 +90,7 @@ class LicenseManager(Ring):
         args = [self.path, 'license', 'list']
         if path:
             args.extend(['--path', path.strip()])
-        r = run_command(args)
+        r = self._run_command(args)
         return r.split()
 
     def put(self, license: bytes, path: str = '') -> bool:
@@ -104,7 +103,7 @@ class LicenseManager(Ring):
         if path:
             args.extend(['--path', path.strip()])
         try:
-            run_command(args)
+            self._run_command(args)
         finally:
             if os.path.exists(license_file):
                 os.remove(license_file)
@@ -116,7 +115,7 @@ class LicenseManager(Ring):
         args = [self.path, 'license', 'remove', '--name', name.strip(), '--all']
         if path:
             args.extend(['--path', path.strip()])
-        run_command(args)
+        self._run_command(args)
         return True
 
     def validate(self, name: str, path: str = '') -> bool:
@@ -125,5 +124,5 @@ class LicenseManager(Ring):
         args = [self.path, 'license', 'validate', '--name', name.strip()]
         if path:
             args.extend(['--path', path.strip()])
-        run_command(args)
+        self._run_command(args)
         return True
