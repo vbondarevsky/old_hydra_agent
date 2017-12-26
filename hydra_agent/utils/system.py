@@ -1,6 +1,5 @@
 import platform
 import subprocess
-from locale import getpreferredencoding
 from tempfile import NamedTemporaryFile
 
 

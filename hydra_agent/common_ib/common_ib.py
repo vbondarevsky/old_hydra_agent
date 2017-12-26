@@ -1,0 +1,2 @@
+class CommonIB:
+    pass
