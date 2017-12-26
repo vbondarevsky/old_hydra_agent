@@ -1,8 +1,8 @@
-import os.path
+from os.path import join
 
 
 class Rac:
     def __init__(self, config):
-        self.path = os.path.join(config.rac.path, "rac")
+        self.path = join(config['rac']['path'], 'rac')
 
 # TODO: кроссплатформенное управление сервером
