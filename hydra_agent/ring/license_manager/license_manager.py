@@ -1,4 +1,5 @@
 import os
+from typing import List, Dict
 
 import hydra_agent.utils.system
 from hydra_agent.ring import Ring
@@ -6,7 +7,7 @@ from hydra_agent.utils.system import run_command
 
 
 class LicenseManager(Ring):
-    def __init__(self, config):
+    def __init__(self, config: Dict):
         super().__init__(config)
 
     """Получение лицензии из Центра лицензирования
@@ -54,16 +55,15 @@ class LicenseManager(Ring):
             Задает необходимо ли проверять корректность данных об устройствах, получаемых от системы. По умолчанию данные не проверяются.
     """
 
-    def activate(self, license_info, serial, pin, previous_pin='', path='', validate=False):
+    def activate(self, license_info: dict, serial: str, pin: str, previous_pin: str = '', path: str = '',
+                 validate: bool = False) -> bool:
+        """Activates license"""
+
         pass
 
-    def get(self, name, path=""):
-        """Возвращает файл лицензии
+    def get(self, name: str, path: str = '') -> bytes:
+        """Returns license file"""
 
-        :param str name: Наименование лицензии
-        :param str path: Путь к файлам лицензий
-        :return bytes: Файл лицензии
-        """
         temp_file = hydra_agent.utils.system.temp_file_name()
         args = [self.path, 'license', 'get', '--name', name.strip(), '--license', temp_file]
         if path:
@@ -77,38 +77,26 @@ class LicenseManager(Ring):
                 os.remove(temp_file)
         return lic
 
-    def info(self, name, path=''):
-        """Возвращает информацию о лицензии
+    def info(self, name: str, path: str = '') -> str:
+        """Returns license info"""
 
-        :param str name: Наименование лицензии
-        :param str path: Путь к файлам лицензий
-        :return str: Информация о лицензии
-        """
         args = [self.path, 'license', 'info', '--name', name.strip()]
         if path:
             args.extend(['--path', path.strip()])
-        r = run_command(args)
-        return r
+        return run_command(args)
 
-    def list(self, path=''):
-        """Возвращает список установленных лицензий
+    def list(self, path: str = '') -> List[str]:
+        """Returns list of licenses"""
 
-        :param str path: Путь к файлам лицензий
-        :return list: Список установленных лицензий
-        """
         args = [self.path, 'license', 'list']
         if path:
             args.extend(['--path', path.strip()])
         r = run_command(args)
         return r.split()
 
-    def put(self, license, path=''):
-        """Добавляет файл лицензии
+    def put(self, license: bytes, path: str = '') -> bool:
+        """Adds license file to storage"""
 
-        :param bytes license: Файл лицензии
-        :param str path: Путь к файлам лицензий
-        :return boolean: Результат добавления
-        """
         license_file = hydra_agent.utils.system.temp_file_name()
         with open(license_file, 'wb') as f:
             f.write(license)
@@ -122,26 +110,18 @@ class LicenseManager(Ring):
                 os.remove(license_file)
         return True
 
-    def remove(self, name, path=''):
-        """Удаляет лицензии
+    def remove(self, name: str, path: str = '') -> bool:
+        """Removes license file from storage"""
 
-        :param str name: Наименование лицензии
-        :param str path: Путь к файлам лицензий
-        :return boolean: Результат удаления
-        """
         args = [self.path, 'license', 'remove', '--name', name.strip(), '--all']
         if path:
             args.extend(['--path', path.strip()])
         run_command(args)
         return True
 
-    def validate(self, name, path=''):
-        """Возвращает список установленных лицензий
+    def validate(self, name: str, path: str = '') -> bool:
+        """Validates license"""
 
-        :param str name: Наименование лицензии
-        :param str path: Путь к файлам лицензий
-        :return boolean: Результат проверки
-        """
         args = [self.path, 'license', 'validate', '--name', name.strip()]
         if path:
             args.extend(['--path', path.strip()])

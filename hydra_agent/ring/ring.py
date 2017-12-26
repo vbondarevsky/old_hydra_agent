@@ -1,11 +1,12 @@
 import re
 from os.path import join
+from typing import Dict
 
 from hydra_agent.utils.system import run_command, is_windows
 
 
 class Ring:
-    def __init__(self, config):
+    def __init__(self, config: Dict):
         self.path = join(config['ring']['path'], 'ring' + '.cmd' if is_windows() else '')
 
     @property
@@ -15,7 +16,7 @@ class Ring:
     @property
     def modules(self):
         result = run_command([self.path, 'help', 'modules'])
-        p = re.compile(r'[@|:|-]')
+        p = re.compile(r'[@:-]')
 
         modules = []
         for i in result.split('\n')[1:]:
