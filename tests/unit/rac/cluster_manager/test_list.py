@@ -26,11 +26,11 @@ out_2 = ('cluster                       : 73a6a1b2-1111-11e7-049e-000d3a2c0d8b\n
          'lifetime-limit                : 0\n'
          'max-memory-size               : 0\n'
          'max-memory-time-limit         : 0\n'
-         'security-level                : 0\n'
+         'security-level                : 2\n'
          'session-fault-tolerance-level : 0\n'
-         'load-balancing-mode           : performance\n'
+         'load-balancing-mode           : memory\n'
          'errors-count-threshold        : 0\n'
-         'kill-problem-processes        : 0\n\n')
+         'kill-problem-processes        : 1\n\n')
 
 
 @pytest.mark.parametrize('out, expected', [
