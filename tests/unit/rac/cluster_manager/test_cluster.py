@@ -19,6 +19,7 @@ raw = ('cluster                       : 73a6a1b2-db40-11e7-049e-000d3a2c0d8b\n'
 
 def test_create_from_string():
     cluster = Cluster(raw=raw)
+    assert cluster.id == '73a6a1b2-db40-11e7-049e-000d3a2c0d8b'
     assert cluster.host == '1C'
     assert cluster.port == 1541
     assert cluster.name == '"Локальный кластер"'
@@ -31,3 +32,8 @@ def test_create_from_string():
     assert cluster.load_balancing_mode == LoadBalancingMode('performance')
     assert cluster.errors_count_threshold == 5
     assert cluster.kill_problem_processes
+
+
+def test_create_from_id():
+    cluster = Cluster(id='73a6a1b2-db40-11e7-049e-000d3a2c0d8b\n')
+    assert cluster.id == '73a6a1b2-db40-11e7-049e-000d3a2c0d8b'
