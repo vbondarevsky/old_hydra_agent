@@ -28,7 +28,7 @@ out_4 = ('Ошибка получения списка лицензий.\nПо �
 
 
 @pytest.mark.parametrize('out, license_info, serial, pin, previous_pin, path', [
-    (out_1, info_1, '800123456', '123-123-123-123-123', None, None),
+    (out_1, info_1, '800123456', '123-123-123-123-123', None, '/var/1C/licenses'),
     (out_1, info_1, '800123456', '123-123-123-123-123', '222-123-123-123-123', None),
     (out_1, info_1, '800123456', '123-123-123-123-123', None, None),
 ], ids=['first_activation', 'second_activation', 'restore'])
