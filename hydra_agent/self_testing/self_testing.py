@@ -1,2 +1,0 @@
-class SelfTesting:
-    pass

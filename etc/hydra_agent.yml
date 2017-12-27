@@ -1,5 +1,3 @@
-v8:
-  path: C:\Program Files\1cv8\8.3.11.2831\bin
 ring:
   path: C:\Program Files\1C\1CE\ring # /opt/1C/1CE/x86_64/ring/
   java: C:\Program Files\Java\jre-9.0.1
