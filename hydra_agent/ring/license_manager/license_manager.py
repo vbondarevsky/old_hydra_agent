@@ -9,56 +9,21 @@ class LicenseManager(Ring):
     def __init__(self, config: Dict):
         super().__init__(config)
 
-    """Получение лицензии из Центра лицензирования
-  
-        --company <значение>
-            Наименование огранизации.
-        --last-name <значение>
-            Фамилия пользователя.
-        --first-name <значение>
-            Имя пользователя.
-        --middle-name <значение>
-            Отчество пользователя.
-        --email <значение>
-            Адрес электронной почты пользователя.
-        --country <значение>
-            Обязательный параметр Наименование страны.
-        --zip-code <значение>
-            Обязательный параметр Почтовый индекс.
-        --region <значение>
-            Наименование области/республики/края/штата.
-        --district <значение>
-            Наименование района.
-        --town <значение>
-            Обязательный параметр Наименование города.
-        --street <значение>
-            Обязательный параметр Наименование улицы.
-        --house <значение>
-            Номер дома/квартала/владения.
-        --building <значение>
-            Корпус/строение/секция.
-        --apartment <значение>
-            Квартира/офис.
-
-        --serial <значение>
-            Обязательный параметр Регистрационный номер.
-
-        --pin <значение>
-            Пин-код. Если не указано, будет ожидаться ввод пин-кода.
-        --previous-pin <значение>
-            Старый пин-код. Требуется для повторной регистрации лицензии.
-            
-        --path <значение>
-            Путь к файлам лицензий.
-        --validate <значение>
-            Задает необходимо ли проверять корректность данных об устройствах, получаемых от системы. По умолчанию данные не проверяются.
-    """
-
-    def activate(self, license_info: dict, serial: str, pin: str, previous_pin: str = '', path: str = '',
-                 validate: bool = False) -> bool:
+    def activate(self, license_info: Dict, serial: str, pin: str, previous_pin: str = '', path: str = '') -> bool:
         """Activates license"""
 
-        pass
+        args = [self.path, 'license', 'activate']
+        for k, v in license_info.items():
+            if v.strip():
+                args.append(f'--{k.replace("_","-")}')
+                args.append(v.strip())
+        args.extend(['--pin', pin.strip()])
+        if previous_pin:
+            args.extend(['--previous-pin', previous_pin.strip()])
+        if path:
+            args.extend(['--path', path.strip()])
+        self._run_command(args)
+        return True
 
     def get(self, name: str, path: str = '') -> bytes:
         """Returns license file"""

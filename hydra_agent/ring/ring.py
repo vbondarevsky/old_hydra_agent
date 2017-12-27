@@ -28,5 +28,6 @@ class Ring:
         return modules
 
     def _run_command(self, args):
+        # TODO: запуск под sudo
         os.environ['JAVA_HOME'] = self.java
         return run_command(args)
