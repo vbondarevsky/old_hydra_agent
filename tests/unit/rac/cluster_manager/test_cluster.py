@@ -1,4 +1,6 @@
 from hydra_agent.rac.cluster_manager.cluster import Cluster
+from hydra_agent.rac.cluster_manager.load_balancing_mode import LoadBalancingMode
+from hydra_agent.rac.cluster_manager.security_level import SecurityLevel
 
 raw = ('cluster                       : 73a6a1b2-db40-11e7-049e-000d3a2c0d8b\n'
        'host                          : 1C\n'
@@ -24,8 +26,8 @@ def test_create_from_string():
     assert cluster.lifetime_limit == 100
     assert cluster.max_memory_size == 2500000
     assert cluster.max_memory_time_limit == 300
-    assert cluster.security_level == 2
+    assert cluster.security_level == SecurityLevel.ProtectedConnectionDuringEntireSession
     assert cluster.session_fault_tolerance_level == 3
-    assert cluster.load_balancing_mode == 'performance'
+    assert cluster.load_balancing_mode == LoadBalancingMode('performance')
     assert cluster.errors_count_threshold == 5
-    assert cluster.kill_problem_processes == 1
+    assert cluster.kill_problem_processes

@@ -1,3 +1,7 @@
+from hydra_agent.rac.cluster_manager.load_balancing_mode import LoadBalancingMode
+from hydra_agent.rac.cluster_manager.security_level import SecurityLevel
+
+
 class Cluster:
     def __init__(self, raw: str):
         result = self.__parse(raw)
@@ -8,15 +12,11 @@ class Cluster:
         self.lifetime_limit = int(result['lifetime-limit'])
         self.max_memory_size = int(result['max-memory-size'])
         self.max_memory_time_limit = int(result['max-memory-time-limit'])
-        # TODO: Может лучше перечисление?
-        self.security_level = int(result['security-level'])
-        # TODO: Может лучше перечисление?
+        self.security_level = SecurityLevel(int(result['security-level']))
         self.session_fault_tolerance_level = int(result['session-fault-tolerance-level'])
-        # TODO: Может лучше перечисление?
-        self.load_balancing_mode = result['load-balancing-mode']
+        self.load_balancing_mode = LoadBalancingMode(result['load-balancing-mode'])
         self.errors_count_threshold = int(result['errors-count-threshold'])
-        # TODO: Может лучше перечисление?
-        self.kill_problem_processes = int(result['kill-problem-processes'])
+        self.kill_problem_processes = bool(int(result['kill-problem-processes']))
 
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
