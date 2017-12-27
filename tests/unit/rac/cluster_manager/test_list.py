@@ -18,7 +18,7 @@ out_1 = ('cluster                       : 73a6a1b2-db40-11e7-049e-000d3a2c0d8b\n
          'load-balancing-mode           : performance\n'
          'errors-count-threshold        : 0\n'
          'kill-problem-processes        : 0\n\n')
-out_2 = ('cluster                       : 73a6a1b2-db40-11e7-049e-000d3a2c0d8b\n'
+out_2 = ('cluster                       : 73a6a1b2-1111-11e7-049e-000d3a2c0d8b\n'
          'host                          : 1C\n'
          'port                          : 1541\n'
          'name                          : "Локальный кластер"\n'
