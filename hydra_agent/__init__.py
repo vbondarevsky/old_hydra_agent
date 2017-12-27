@@ -7,5 +7,3 @@ settings = Config()()
 ring = Ring(settings)
 license_manager = LicenseManager(settings)
 rac = Rac(settings)
-
-__version__ = '0.0.1'

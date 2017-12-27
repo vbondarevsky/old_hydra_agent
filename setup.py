@@ -1,18 +1,31 @@
-import setuptools
+import os
 
-import hydra_agent
+from setuptools import find_packages, setup
 
-configuration = {
-    "name": "hydra_agent",
-    "version": hydra_agent.__version__,
-    "description": "The management agent 1C-infrastructure",
-    "author": "Vladimir Bondarevskiy",
-    "author_email": "vbondarevsky@gmail.com",
-    "packages": setuptools.find_packages(exclude=["tests", "tests.*"]),
-    "include_package_data": True,
-    "install_requires": [
-        "yaml",
+NAME = 'hydra_agent'
+here = os.path.abspath(os.path.dirname(__file__))
+
+about = {}
+with open(os.path.join(here, NAME, '__version__.py')) as f:
+    exec(f.read(), about)
+
+setup(
+    name=NAME,
+    version=about[NAME],
+    description='Cross-platform remote administration agent for 1C:Enterprise',
+    author='Vladimir Bondarevskiy',
+    author_email='vbondarevsky@gmail.com',
+    url='https://github.com/vbondarevsky/hydra_agent',
+    packages=find_packages(exclude=["tests", "tests.*"]),
+    python_requires='>=3',
+    install_requires=[
+        'pyyaml',
+        'aiohttp'
     ],
-    "zip_safe": True,
-}
-setuptools.setup(**configuration)
+    zip_safe=True,
+    entry_points={
+        'console_scripts': [
+            'hydra_agent = hydra_agent.main:run'
+        ]
+    }
+)
