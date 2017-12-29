@@ -21,6 +21,5 @@ from hydra_agent.ring import Ring
 from hydra_agent.ring.license_manager import LicenseManager
 
 settings = Config()()
-ring = Ring(settings)
 license_manager = LicenseManager(settings)
 rac = Rac(settings)
