@@ -32,6 +32,7 @@ setup(
     name=NAME,
     version=about[NAME],
     description='Cross-platform remote administration agent for 1C:Enterprise',
+    long_description=long_description,
     author='Vladimir Bondarevskiy',
     author_email='vbondarevsky@gmail.com',
     url='https://github.com/vbondarevsky/hydra_agent',
