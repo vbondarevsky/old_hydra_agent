@@ -33,6 +33,7 @@ setup(
     author='Vladimir Bondarevskiy',
     author_email='vbondarevsky@gmail.com',
     url='https://github.com/vbondarevsky/hydra_agent',
+    license="https://www.gnu.org/licenses/gpl-3.0",
     packages=find_packages(exclude=["tests", "tests.*"]),
     python_requires='>=3',
     install_requires=[
@@ -44,5 +45,11 @@ setup(
         'console_scripts': [
             'hydra_agent = hydra_agent.main:run'
         ]
-    }
+    },
+    classifiers=[
+        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: Implementation :: CPython',
+    ],
 )
