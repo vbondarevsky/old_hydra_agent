@@ -15,11 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from hydra_agent.config import Config
 from hydra_agent.rac import Rac
 from hydra_agent.ring import Ring
 from hydra_agent.ring.license_manager import LicenseManager
+from hydra_agent.config import Config
 
-settings = Config()()
-license_manager = LicenseManager(settings)
-rac = Rac(settings)
+config = Config()

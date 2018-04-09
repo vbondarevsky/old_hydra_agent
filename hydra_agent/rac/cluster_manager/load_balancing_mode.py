@@ -15,9 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from enum import Enum
+import enum
 
 
-class LoadBalancingMode(Enum):
-    Performance = 'performance'
-    Memory = 'memory'
+class LoadBalancingMode(enum.Enum):
+    Performance = "performance"
+    Memory = "memory"

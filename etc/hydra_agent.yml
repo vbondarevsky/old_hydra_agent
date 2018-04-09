@@ -2,6 +2,12 @@ ring:
   path: C:\Program Files\1C\1CE\ring # /opt/1C/1CE/x86_64/ring/
   java: C:\Program Files\Java\jre-9.0.1
 rac:
-  path: C:\Program Files\1cv8\8.3.11.2831\bin
+  path: C:\Program Files\1cv8\8.3.12.1159\bin
   server: localhost
   port: 1545
+api:
+  host: localhost
+  port: 9523
+  debug: True
+v8:
+  path: C:\Program Files\1cv8\8.3.12.1159\bin

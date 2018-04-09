@@ -15,11 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from aiohttp import web
+import aiohttp.web
 
-from hydra_agent import license_manager
+from hydra_agent import LicenseManager
+from hydra_agent import config
 
 
-class LicenseHandler(web.View):
+class LicenseHandler(aiohttp.web.View):
     async def get(self):
-        return web.json_response(license_manager.list())
+        return aiohttp.web.json_response(LicenseManager(config.ring).list())

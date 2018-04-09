@@ -15,16 +15,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from aiohttp import web
+import aiohttp.web
 
+from hydra_agent import config
 from hydra_agent.api.routes import setup_routes
-
-DEBUG = True  # TODO: вынести в конфиг
-HOST = '127.0.0.1'  # TODO: вынести в конфиг
-PORT = 9523  # TODO: вынести в конфиг
 
 
 def run_server():
-    app = web.Application(debug=DEBUG)
+    app = aiohttp.web.Application(debug=config.api.debug)
     setup_routes(app)
-    web.run_app(app, host=HOST, port=PORT)
+    aiohttp.web.run_app(app, host=config.api.host, port=config.api.port)

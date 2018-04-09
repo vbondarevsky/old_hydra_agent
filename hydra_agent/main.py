@@ -15,12 +15,23 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import optparse
+
+from hydra_agent import config
 from hydra_agent.api.main import run_server
 
 
 def run():
+    parser = optparse.OptionParser()
+    parser.add_option("-c", "--config", dest="config", help="path to config file")
+
+    (options, args) = parser.parse_args()
+
+    if options.config:
+        config.reload(path=options.config)
+
     run_server()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     run()

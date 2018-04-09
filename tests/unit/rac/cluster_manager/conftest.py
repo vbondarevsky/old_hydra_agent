@@ -22,6 +22,6 @@ from hydra_agent.rac.cluster_manager import ClusterManager
 
 
 @pytest.fixture
-def fake_cluster_manager():
-    settings = Config(source='rac:\n    path: /opt/1C/v8.3/x86_64')()
-    return ClusterManager(config=settings)
+def cluster_manager():
+    config = Config(source="rac:\n  path: /opt/1C/v8.3/x86_64")
+    return ClusterManager(config.rac)

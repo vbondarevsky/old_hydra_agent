@@ -15,10 +15,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from enum import IntEnum
+import enum
 
 
-class SecurityLevel(IntEnum):
+class SecurityLevel(enum.IntEnum):
     InsecureConnection = 0
     ProtectedConnectionOnlyDuringAdminAuthentication = 1
     ProtectedConnectionDuringEntireSession = 2
