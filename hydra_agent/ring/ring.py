@@ -23,7 +23,7 @@ from hydra_agent.utils.system import run_command, is_windows
 
 class Ring:
     def __init__(self, config):
-        self.path = os.path.join(config.path, "ring" + ".cmd" if is_windows() else "")
+        self.path = os.path.join(config.path, "ring" + (".cmd" if is_windows() else ""))
         self.java = config.java
 
     @property
