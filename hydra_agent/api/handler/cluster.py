@@ -16,8 +16,8 @@
 
 import aiohttp.web
 
-from api.handler.base import BaseHandler
-from rac.cluster_manager import ClusterManager
+from hydra_agent.api.handler.base import BaseHandler
+from hydra_agent.rac.cluster_manager import ClusterManager
 
 
 class ClusterHandler(BaseHandler):

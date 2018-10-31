@@ -16,9 +16,9 @@
 
 import aiohttp.web
 
-from api.handler.base import BaseHandler
+from hydra_agent.api.handler.base import BaseHandler
+from hydra_agent.rac.cluster_manager.cluster import Cluster
 from hydra_agent.rac.session_manager import SessionManager
-from rac.cluster_manager.cluster import Cluster
 
 
 class SessionHandler(BaseHandler):
