@@ -17,22 +17,37 @@
 
 import os.path
 
+from hydra_agent import config
 from hydra_agent.utils.system import run_command
+from utils import is_windows
 
 
 class Rac:
-    def __init__(self, config):
-        self.path = os.path.join(config.path, "rac")
-        self.host = config.host
-        self.port = config.port
+    def __init__(self, settings=None):
+        if not settings:
+            settings = config.rac
+        self.path = os.path.join(settings.path, "rac" + (".exe" if is_windows() else ""))
+        self.host = settings.host
+        self.port = settings.port
 
     @property
     def version(self):
         return self._run_command([self.path, "--version"])
 
     def _run_command(self, args):
-        return run_command(self.__add_server([self.path, "--version"]))
+        args = self.__add_server([self.path]) + args
+        return run_command(args)
 
     def __add_server(self, args):
         args.append(f"{self.host}:{self.port}")
         return args
+
+    @staticmethod
+    def _parse_output(output):
+        for block in output.strip().split("\n\n"):
+            if block:
+                item = {}
+                for line in block.strip().split("\n"):
+                    k, v = line.split(":", 1)
+                    item[k.strip()] = v.strip()
+                yield item

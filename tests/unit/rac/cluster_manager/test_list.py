@@ -22,10 +22,25 @@ import pytest
 from hydra_agent.rac.cluster_manager.cluster import Cluster
 from tests.unit import success_result
 
-out_1 = ("cluster                       : 73a6a1b2-db40-11e7-049e-000d3a2c0d8b\n"
-         "host                          : 1C\n"
+out_1 = ("cluster                       : aa8b5a4b-7c20-4982-a865-4a8bb8affcb1\n"
+         "host                          : localhost\n"
+         "port                          : 2541\n"
+         "name                          : \"second\"\n"
+         "expiration-timeout            : 0\n"
+         "lifetime-limit                : 1345\n"
+         "max-memory-size               : 0\n"
+         "max-memory-time-limit         : 0\n"
+         "security-level                : 0\n"
+         "session-fault-tolerance-level : 3\n"
+         "load-balancing-mode           : memory\n"
+         "errors-count-threshold        : 0\n"
+         "kill-problem-processes        : 0\n"
+         "\n")
+
+out_2 = ("cluster                       : aef2b782-b27d-428f-bba2-cf807d769f57\n"
+         "host                          : localhost\n"
          "port                          : 1541\n"
-         "name                          : \"Локальный кластер\"\n"
+         "name                          : \"name\"\n"
          "expiration-timeout            : 0\n"
          "lifetime-limit                : 0\n"
          "max-memory-size               : 0\n"
@@ -34,34 +49,54 @@ out_1 = ("cluster                       : 73a6a1b2-db40-11e7-049e-000d3a2c0d8b\n
          "session-fault-tolerance-level : 0\n"
          "load-balancing-mode           : performance\n"
          "errors-count-threshold        : 0\n"
-         "kill-problem-processes        : 0\n\n")
+         "kill-problem-processes        : 0\n"
+         "\n")
 
-out_2 = ("cluster                       : 73a6a1b2-1111-11e7-049e-000d3a2c0d8b\n"
-         "host                          : 1C\n"
-         "port                          : 1541\n"
-         "name                          : \"Локальный кластер\"\n"
-         "expiration-timeout            : 0\n"
-         "lifetime-limit                : 0\n"
-         "max-memory-size               : 0\n"
-         "max-memory-time-limit         : 0\n"
-         "security-level                : 2\n"
-         "session-fault-tolerance-level : 0\n"
-         "load-balancing-mode           : memory\n"
-         "errors-count-threshold        : 0\n"
-         "kill-problem-processes        : 1\n\n")
+params1 = {
+    "cluster": "aa8b5a4b-7c20-4982-a865-4a8bb8affcb1",
+    "host": "localhost",
+    "port": "2541",
+    "name": "\"second\"",
+    "expiration-timeout": "0",
+    "lifetime-limit": "1345",
+    "max-memory-size": "0",
+    "max-memory-time-limit": "0",
+    "security-level": "0",
+    "session-fault-tolerance-level": "3",
+    "load-balancing-mode": "memory",
+    "errors-count-threshold": "0",
+    "kill-problem-processes": "0",
+}
+params2 = {
+    "cluster": "aef2b782-b27d-428f-bba2-cf807d769f57",
+    "host": "localhost",
+    "port": "1541",
+    "name": "\"name\"",
+    "expiration-timeout": "0",
+    "lifetime-limit": "0",
+    "max-memory-size": "0",
+    "max-memory-time-limit": "0",
+    "security-level": "0",
+    "session-fault-tolerance-level": "0",
+    "load-balancing-mode": "performance",
+    "errors-count-threshold": "0",
+    "kill-problem-processes": "0",
+}
+cluster1 = Cluster.from_dict(params1)
+cluster2 = Cluster.from_dict(params2)
 
 
 @pytest.mark.parametrize(
     "out, expected",
     [
-        ("\n\n", []),
-        (out_1, [Cluster(out_1)]),
-        (out_1 + out_2, [Cluster(out_1), Cluster(out_2)])
+        ("\n", []),
+        (out_1, [cluster1]),
+        (out_1 + out_2, [cluster1, cluster2]),
     ],
     ids=["empty", "one", "few"]
 )
 def test_success(monkeypatch, cluster_manager, out, expected):
     monkeypatch.setattr(subprocess, "run", lambda args, **kwargs: success_result(args, out))
-    assert cluster_manager.list() == expected
+    assert list(cluster_manager.list()) == expected
 
 # TODO: Какие фейлы можно протестировать?

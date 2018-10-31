@@ -14,20 +14,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 from hydra_agent import Rac
+from hydra_agent import config
 from hydra_agent.rac.cluster_manager.cluster import Cluster
 
 
 class ClusterManager(Rac):
-    def __init__(self, config):
-        super().__init__(config)
+    def __init__(self, settings=None):
+        if not settings:
+            settings = config.rac
+        super().__init__(settings)
 
     def list(self):
         """Returns list of `Cluster`"""
 
-        result = []
-        for cluster_info in super()._run_command(["cluster", "list"]).split("\n\n"):
-            if cluster_info.strip():
-                result.append(Cluster(cluster_info))
-        return result
+        output = super()._run_command(["cluster", "list"])
+        for params in self._parse_output(output):
+            yield Cluster.from_dict(params)

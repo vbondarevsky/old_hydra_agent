@@ -14,9 +14,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
+from hydra_agent.api.handler.cluster import ClusterHandler
 from hydra_agent.api.handler.heartbeat import HeartbeatHandler
 from hydra_agent.api.handler.license import LicenseHandler
+from hydra_agent.api.handler.session import SessionHandler
 
 
 def build_route(route):
@@ -26,3 +27,5 @@ def build_route(route):
 def setup_routes(app):
     app.router.add_route("*", build_route("/license"), LicenseHandler)
     app.router.add_route("*", build_route("/heartbeat"), HeartbeatHandler)
+    app.add_routes(ClusterHandler().routes)
+    app.add_routes(SessionHandler().routes)

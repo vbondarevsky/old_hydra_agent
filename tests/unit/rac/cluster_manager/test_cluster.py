@@ -19,23 +19,25 @@ from hydra_agent.rac.cluster_manager.cluster import Cluster
 from hydra_agent.rac.cluster_manager.load_balancing_mode import LoadBalancingMode
 from hydra_agent.rac.cluster_manager.security_level import SecurityLevel
 
-raw = ("cluster                       : 73a6a1b2-db40-11e7-049e-000d3a2c0d8b\n"
-       "host                          : 1C\n"
-       "port                          : 1541\n"
-       "name                          : \"Локальный кластер\"\n"
-       "expiration-timeout            : 20\n"
-       "lifetime-limit                : 100\n"
-       "max-memory-size               : 2500000\n"
-       "max-memory-time-limit         : 300\n"
-       "security-level                : 2\n"
-       "session-fault-tolerance-level : 3\n"
-       "load-balancing-mode           : performance\n"
-       "errors-count-threshold        : 5\n"
-       "kill-problem-processes        : 1\n\n")
+params = {
+    "cluster": "73a6a1b2-db40-11e7-049e-000d3a2c0d8b",
+    "host": "1C",
+    "port": "1541",
+    "name": "\"Локальный кластер\"",
+    "expiration-timeout": "20",
+    "lifetime-limit": "100",
+    "max-memory-size": "2500000",
+    "max-memory-time-limit": "300",
+    "security-level": "2",
+    "session-fault-tolerance-level": "3",
+    "load-balancing-mode": "performance",
+    "errors-count-threshold": "5",
+    "kill-problem-processes": "1",
+}
 
 
-def test_create_from_string():
-    cluster = Cluster(raw=raw)
+def test_create_from_dict():
+    cluster = Cluster.from_dict(params)
     assert cluster.id == "73a6a1b2-db40-11e7-049e-000d3a2c0d8b"
     assert cluster.host == "1C"
     assert cluster.port == 1541
@@ -52,5 +54,5 @@ def test_create_from_string():
 
 
 def test_create_from_id():
-    cluster = Cluster(id="73a6a1b2-db40-11e7-049e-000d3a2c0d8b\n")
+    cluster = Cluster("73a6a1b2-db40-11e7-049e-000d3a2c0d8b\n")
     assert cluster.id == "73a6a1b2-db40-11e7-049e-000d3a2c0d8b"
