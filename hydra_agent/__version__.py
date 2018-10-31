@@ -15,4 +15,4 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-hydra_agent = "0.0.7"
+hydra_agent = "0.0.8"
