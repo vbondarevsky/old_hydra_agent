@@ -19,7 +19,7 @@ import os.path
 
 from hydra_agent import config
 from hydra_agent.utils.system import run_command
-from utils import is_windows
+from hydra_agent.utils import is_windows
 
 
 class Rac:
