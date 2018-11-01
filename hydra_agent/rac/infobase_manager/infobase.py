@@ -16,21 +16,28 @@
 
 
 class InfoBase:
-    def __init__(self, raw="", id=""):
-        if id:
-            self.id = id.strip()
-        else:
-            result = self.__parse(raw)
-            self.id = result["infobase"]
-            self.name = result["name"]
-            self.description = result["descr"]
+    id = ""
+    name = ""
+    description = ""
+
+    def __init__(self, session_id, cluster):
+        self.id = session_id.strip()
+        self.cluster = cluster
 
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
 
-    def __parse(self, raw):
-        result = {}
-        for i in raw.strip().split("\n"):
-            k, v = i.split(":", 1)
-            result[k.strip()] = v.strip()
-        return result
+    @staticmethod
+    def from_dict(params, cluster):
+        infobase = InfoBase(params["infobase"], cluster)
+        infobase.name = params["name"]
+        infobase.description = params["descr"]
+        return infobase
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "description": self.description,
+            "cluster": self.cluster.to_dict(),
+        }
