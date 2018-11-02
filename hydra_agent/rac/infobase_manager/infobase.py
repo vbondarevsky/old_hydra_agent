@@ -27,6 +27,9 @@ class InfoBase:
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
 
+    def __repr__(self):
+        return f"<InfoBase(id={self.id}, name={self.name}, cluster={self.cluster})>"
+
     @staticmethod
     def from_dict(params, cluster):
         infobase = InfoBase(params["infobase"], cluster)

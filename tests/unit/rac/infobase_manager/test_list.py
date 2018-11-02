@@ -20,23 +20,47 @@ import subprocess
 import pytest
 
 from hydra_agent.rac.infobase_manager.infobase import InfoBase
+from rac.cluster_manager.cluster import Cluster
 from tests.unit import success_result
 
-out_1 = "infobase : 4a824148-db94-11e7-7b82-000d3a2c0d8b\nname     : test_acc\ndescr    : \n\n"
-out_2 = "infobase : a50570f4-db94-11e7-7b82-000d3a2c0d8b\nname     : test_hrm\ndescr    : \n\n"
+out1 = ("infobase : df9533ac-4042-46b1-b445-2fa5d5be62a7\n"
+        "name     : test_acc\n"
+        "descr    : \"Тестовая база\"\n"
+        "\n")
+out2 = ("infobase : 017a66af-f7de-4a39-b988-e5fce435be46\n"
+        "name     : test_hrm\n"
+        "descr    :\n"
+        "\n")
+
+params1 = {
+    "infobase": "df9533ac-4042-46b1-b445-2fa5d5be62a7",
+    "name": "test_acc",
+    "descr": "\"Тестовая база\"",
+}
+
+params2 = {
+    "infobase": "017a66af-f7de-4a39-b988-e5fce435be46",
+    "name": "test_hrm",
+    "descr": "",
+}
+
+cluster = Cluster("73a6a1b2-db40-11e7-049e-000d3a2c0d8b")
+
+infobase1 = InfoBase.from_dict(params1, cluster)
+infobase2 = InfoBase.from_dict(params2, cluster)
 
 
 @pytest.mark.parametrize(
     "out, expected",
     [
-        ("\n\n", []),
-        (out_1, [InfoBase(out_1)]),
-        (out_1 + out_2, [InfoBase(out_1), InfoBase(out_2)])
+        ("\n", []),
+        (out1, [infobase1]),
+        (out1 + out2, [infobase1, infobase2])
     ],
     ids=["empty", "one", "few"]
 )
-def test_success(monkeypatch, infobase_manager, out, expected):
+def test_summary_success(monkeypatch, infobase_manager, out, expected):
     monkeypatch.setattr(subprocess, "run", lambda args, **kwargs: success_result(args, out))
-    assert infobase_manager.list() == expected
+    assert list(infobase_manager.list()) == expected
 
 # TODO: Какие фейлы можно протестировать?

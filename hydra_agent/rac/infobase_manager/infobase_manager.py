@@ -16,23 +16,20 @@
 
 
 from hydra_agent import Rac
+from hydra_agent import config
 from hydra_agent.rac.infobase_manager.infobase import InfoBase
 
 
 class InfoBaseManager(Rac):
-    def __init__(self, config, cluster):
-        super().__init__(config)
+    def __init__(self, cluster, settings=None):
+        if not settings:
+            settings = config.rac
+        super().__init__(settings)
         self.cluster = cluster
 
     def list(self):
-        """Returns list of `InfoBase`"""
+        """Returns collection of `InfoBase`"""
 
-        result = []
-        for ib_info in self._run_command(["infobase", "summary", "list"]).split("\n\n"):
-            if ib_info.strip():
-                result.append(InfoBase(ib_info))
-        return result
-
-    def _run_command(self, args):
-        args.append(f"--cluster={self.cluster.id}")
-        return super()._run_command(args)
+        output = super()._run_command(["infobase", "summary", "list", f"--cluster={self.cluster.id}"])
+        for params in self._parse_output(output):
+            yield InfoBase.from_dict(params, self.cluster)

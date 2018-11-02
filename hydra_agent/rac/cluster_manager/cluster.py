@@ -39,6 +39,9 @@ class Cluster:
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
 
+    def __repr__(self):
+        return f"<Cluster(id={self.id})>"
+
     @staticmethod
     def from_dict(params):
         cluster = Cluster(params["cluster"])

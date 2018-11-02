@@ -25,4 +25,4 @@ from hydra_agent.rac.infobase_manager import InfoBaseManager
 @pytest.fixture
 def infobase_manager():
     config = Config(source="rac:\n  path: /opt/1C/v8.3/x86_64")
-    return InfoBaseManager(config.rac, Cluster("73a6a1b2-db40-11e7-049e-000d3a2c0d8b"))
+    return InfoBaseManager(Cluster("73a6a1b2-db40-11e7-049e-000d3a2c0d8b"), config.rac)

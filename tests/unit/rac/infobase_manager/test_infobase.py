@@ -15,18 +15,25 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from hydra_agent.rac.cluster_manager.cluster import Cluster
 from hydra_agent.rac.infobase_manager.infobase import InfoBase
 
-raw = "infobase : 4a824148-db94-11e7-7b82-000d3a2c0d8b\nname     : test_acc\ndescr    : \n\n"
+params = {
+    "infobase": "73a6a1b2-db40-11e7-049e-000d3a2c0d8b",
+    "name": "test_acc",
+    "descr": "Тестовая база БП",
+}
 
 
-def test_create_from_string():
-    ib = InfoBase(raw=raw)
-    assert ib.id == "4a824148-db94-11e7-7b82-000d3a2c0d8b"
-    assert ib.name == "test_acc"
-    assert ib.description == ""
+def test_create_from_dict():
+    infobase = InfoBase.from_dict(params, Cluster("017a66af-f7de-4a39-b988-e5fce435be46"))
+    assert infobase.id == "73a6a1b2-db40-11e7-049e-000d3a2c0d8b"
+    assert infobase.name == "test_acc"
+    assert infobase.description == "Тестовая база БП"
+    assert infobase.cluster.id == "017a66af-f7de-4a39-b988-e5fce435be46"
 
 
 def test_create_from_id():
-    ib = InfoBase(id="4a824148-db94-11e7-7b82-000d3a2c0d8b\n")
-    assert ib.id == "4a824148-db94-11e7-7b82-000d3a2c0d8b"
+    infobase = InfoBase("73a6a1b2-db40-11e7-049e-000d3a2c0d8b\n", Cluster("017a66af-f7de-4a39-b988-e5fce435be46"))
+    assert infobase.id == "73a6a1b2-db40-11e7-049e-000d3a2c0d8b"
+    assert infobase.cluster.id == "017a66af-f7de-4a39-b988-e5fce435be46"
