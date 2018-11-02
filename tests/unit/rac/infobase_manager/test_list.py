@@ -20,7 +20,7 @@ import subprocess
 import pytest
 
 from hydra_agent.rac.infobase_manager.infobase import InfoBase
-from rac.cluster_manager.cluster import Cluster
+from hydra_agent.rac.cluster_manager.cluster import Cluster
 from tests.unit import success_result
 
 out1 = ("infobase : df9533ac-4042-46b1-b445-2fa5d5be62a7\n"
