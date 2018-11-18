@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import asyncio
 import platform
 import subprocess
 import sys
@@ -57,3 +58,12 @@ def encoding():
         return (sys.stdout.encoding if sys.stdout.isatty() else
                 sys.stderr.encoding if sys.stderr.isatty() else
                 sys.getfilesystemencoding() or "utf-8")
+
+
+async def run_command_async(args):
+    process = await asyncio.create_subprocess_exec(
+        *args,
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE)
+    stdout, stderr = await process.communicate()
+    return stdout.decode(encoding()).strip()
