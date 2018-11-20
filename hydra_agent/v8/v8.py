@@ -65,7 +65,7 @@ class V8:
         await self._run_enterprise(["/Execute", data_processor])
 
     async def _run_designer(self, args):
-        args.extend(["/IBConnectionString", self.connection_string])
+        args.extend(["/IBConnectionString", str(self.connection_string)])
         await self._run_command([
             "DESIGNER",
             *args,
@@ -75,7 +75,7 @@ class V8:
         ])
 
     async def _run_enterprise(self, args):
-        args.extend(["/IBConnectionString", self.connection_string])
+        args.extend(["/IBConnectionString", str(self.connection_string)])
         await self._run_command([
             "ENTERPRISE",
             *args,
