@@ -19,8 +19,9 @@ from hydra_agent.config.base_config import BaseConfig
 
 
 class V8Config(BaseConfig):
-    def __init__(self, path):
+    def __init__(self, path, display=None):
         self.path = path
+        self.display = display
 
     def __str__(self):
-        return f"path={self.path}"
+        return f"path={self.path}, display={self.display}"

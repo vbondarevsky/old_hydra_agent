@@ -60,10 +60,11 @@ def encoding():
                 sys.getfilesystemencoding() or "utf-8")
 
 
-async def run_command_async(args):
+async def run_command_async(args, env=None):
     process = await asyncio.create_subprocess_exec(
         *args,
         stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.PIPE)
+        stderr=asyncio.subprocess.PIPE,
+        env=env)
     stdout, stderr = await process.communicate()
     return stdout.decode(encoding()).strip()

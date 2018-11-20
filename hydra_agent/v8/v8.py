@@ -14,16 +14,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import logging
 import os
 import uuid
 
 from hydra_agent import config
 from hydra_agent.utils import is_windows
-from hydra_agent.utils.system import run_command_async, temp_file_name
-
-
-logger = logging.getLogger("v8")
+from hydra_agent.utils.system import run_command_async
+from hydra_agent.utils.system import temp_file_name
 
 
 class V8:
@@ -33,52 +30,42 @@ class V8:
         if not settings:
             settings = config.v8
         self.path = os.path.join(settings.path, "1cv8" + (".exe" if is_windows() else ""))
+        self.display = settings.display
 
     async def save_db(self, out):
-        await self._run_designer([f'/DumpIB"{out}"'])
-        return self
+        await self._run_designer(["/DumpIB", out])
 
     async def load_db(self, file_db):
-        await self._run_designer([f'/RestoreIB"{file_db}"'])
-        return self
+        await self._run_designer(["/RestoreIB", file_db])
 
     async def create_db(self, name=None, template=None):
-        logger.debug(f"create db {name}")
-        args = [f'"{self.connection_string}"']
+        args = [str(self.connection_string)]
         if name:
-            args.append(f'/AddToList"{name}"')
+            args.extend(["/AddToList", name])
         if template:
-            args.append(f'/UseTemplate"{template}"')
+            args.extend(["/UseTemplate", template])
         await self._run_creation(args)
-        return self
 
     async def update_cf(self, file_cf):
-        logger.debug(f"update cf")
-        await self._run_designer([f'/UpdateCfg"{file_cf}"'])
-        return self
+        await self._run_designer(["/UpdateCfg", file_cf])
 
     async def update_db(self):
-        logger.debug(f"update db")
-        await self._run_designer([f'/UpdateDBCfg'])
-        return self
+        await self._run_designer(["/UpdateDBCfg"])
 
     async def load_extension(self, extension_file):
         extension = "extension_" + uuid.uuid4().hex
         args = [
-            f'/LoadCfg"{extension_file}"',
-            f'-Extension"{extension}"',
-            f'/UpdateDBCfg'
+            "/LoadCfg", extension_file,
+            "-Extension", extension,
+            "/UpdateDBCfg"
         ]
         await self._run_designer(args)
-        return self
 
     async def run_data_processor(self, data_processor):
-        logger.debug(f"run data processor")
-        await self._run_enterprise([f'/Execute"{data_processor}"'])
-        return self
+        await self._run_enterprise(["/Execute", data_processor])
 
     async def _run_designer(self, args):
-        args.append(f'/IBConnectionString"{self.connection_string}"')
+        args.extend(["/IBConnectionString", self.connection_string])
         await self._run_command([
             "DESIGNER",
             *args,
@@ -88,7 +75,7 @@ class V8:
         ])
 
     async def _run_enterprise(self, args):
-        args.append(f'/IBConnectionString"{self.connection_string}"')
+        args.extend(["/IBConnectionString", self.connection_string])
         await self._run_command([
             "ENTERPRISE",
             *args,
@@ -105,10 +92,13 @@ class V8:
 
     async def _run_command(self, args):
         if self.access_code:
-            args.append(f'/UC"{self.access_code}"')
+            args.extend(["/UC", self.access_code])
         log_file = temp_file_name()
         print(log_file)
-        result = await run_command_async([self.path, *args, f'/Out"{log_file}"'])
+        env = None
+        if self.display:
+            env = {"DISPLAY": self.display}
+        result = await run_command_async([self.path, *args, "/Out", log_file], env)
         log = open(log_file).read()
         print(log)
         os.remove(log_file)

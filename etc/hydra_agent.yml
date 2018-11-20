@@ -11,3 +11,4 @@ api:
   debug: True
 v8:
   path: C:\Program Files\1cv8\8.3.13.1513\bin
+  display: 42

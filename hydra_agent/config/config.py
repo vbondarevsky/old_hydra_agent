@@ -90,10 +90,13 @@ class Config:
     @staticmethod
     def _v8_config(config):
         path = ""
+        display = None
         if "v8" in config:
             if "path" in config["v8"]:
                 path = config["v8"]["path"]
-        return V8Config(path)
+            if "display" in config["v8"]:
+                display = config["v8"]["display"]
+        return V8Config(path, display)
 
     @staticmethod
     def _config(path, source):
