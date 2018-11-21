@@ -18,6 +18,7 @@
 import yaml
 
 from hydra_agent.config.api_config import ApiConfig
+from hydra_agent.config.postgresql_config import PostgreSQLConfig
 from hydra_agent.config.rac_config import RacConfig
 from hydra_agent.config.ring_config import RingConfig
 from hydra_agent.config.v8_config import V8Config
@@ -45,6 +46,7 @@ class Config:
         self.ring = self._ring_config(config)
         self.api = self._api_config(config)
         self.v8 = self._v8_config(config)
+        self.postgresql = self._postgresql_config(config)
 
     @staticmethod
     def _rac_config(config):
@@ -97,6 +99,17 @@ class Config:
             if "display" in config["v8"]:
                 display = config["v8"]["display"]
         return V8Config(path, display)
+
+    @staticmethod
+    def _postgresql_config(config):
+        path = ""
+        user = ""
+        password = ""
+        if "postgresql" in config:
+            path = config["postgresql"]["path"]
+            user = config["postgresql"]["user"]
+            password = config["postgresql"]["password"]
+        return PostgreSQLConfig(path, user, password)
 
     @staticmethod
     def _config(path, source):

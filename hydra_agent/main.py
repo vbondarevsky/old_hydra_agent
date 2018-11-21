@@ -14,11 +14,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
+import asyncio
 import optparse
 
 from hydra_agent import config
 from hydra_agent.api.main import run_server
+from hydra_agent.utils import is_windows
 
 
 def run():
@@ -29,7 +30,8 @@ def run():
 
     if options.config:
         config.reload(path=options.config)
-
+    if is_windows():
+        asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
     run_server()
 
 

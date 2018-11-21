@@ -12,3 +12,7 @@ api:
 v8:
   path: C:\Program Files\1cv8\8.3.13.1513\bin
   display: 42
+postgresql:
+  path: C:\Program Files\PostgreSQL 1C\10\bin
+  user: postgres
+  password:
