@@ -37,6 +37,8 @@ class ServerConnectionString(ConnectionString):
 
     @property
     def allow_scheduled_jobs(self):
+        if not isinstance(self._allow_scheduled_jobs, bool):
+            return None
         return self._bool2str(not self._allow_scheduled_jobs)
 
     def _bool2str(self, value):

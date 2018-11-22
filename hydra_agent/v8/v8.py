@@ -33,7 +33,16 @@ class V8:
         self.display = settings.display
 
     async def save_db(self, out):
-        await self._run_designer(["/DumpIB", out])
+        await self._run_command([
+            "DESIGNER",
+            "/S", f"{self.connection_string.server}\\{self.connection_string.name}",
+            "/N", str(self.connection_string.user),
+            "P", str(self.connection_string.password),
+            "/DumpIB", out,
+            "/DisableSplash",
+            "/DisableStartupDialogs",
+            "/DisableStartupMessages",
+        ])
 
     async def load_db(self, file_db):
         await self._run_designer(["/RestoreIB", file_db])
@@ -95,9 +104,9 @@ class V8:
             args.extend(["/UC", self.access_code])
         log_file = temp_file_name()
         print(log_file)
-        env = None
+        env = os.environ.copy()
         if self.display:
-            env = {"DISPLAY": self.display}
+            env["DISPLAY"] = str(self.display)
         result = await run_command_async([self.path, *args, "/Out", log_file], env)
         log = open(log_file).read()
         print(log)
