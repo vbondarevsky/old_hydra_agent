@@ -25,7 +25,7 @@ class PostgreSQL:
     def __init__(self, name, settings=None):
         self.name = name
         if not settings:
-            settings = config.db.postgresql
+            settings = config.postgresql
         self.bin = settings.path
         self.user = settings.user
         self.password = settings.password
