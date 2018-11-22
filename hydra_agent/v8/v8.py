@@ -37,7 +37,7 @@ class V8:
             "DESIGNER",
             "/S", f"{self.connection_string.server}\\{self.connection_string.name}",
             "/N", str(self.connection_string.user),
-            "P", str(self.connection_string.password),
+            "/P", str(self.connection_string.password),
             "/DumpIB", out,
             "/DisableSplash",
             "/DisableStartupDialogs",
