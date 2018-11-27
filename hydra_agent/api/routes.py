@@ -19,6 +19,7 @@ from hydra_agent.api.handler.cluster import ClusterHandler
 from hydra_agent.api.handler.heartbeat import HeartbeatHandler
 from hydra_agent.api.handler.infobase import InfoBaseHandler
 from hydra_agent.api.handler.license import LicenseHandler
+from hydra_agent.api.handler.registry import RegistryHandler
 from hydra_agent.api.handler.session import SessionHandler
 
 
@@ -33,3 +34,4 @@ def setup_routes(app):
     app.add_routes(ClusterHandler().routes)
     app.add_routes(SessionHandler().routes)
     app.add_routes(InfoBaseHandler().routes)
+    app.add_routes(RegistryHandler().routes)
