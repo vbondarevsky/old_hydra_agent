@@ -17,13 +17,20 @@
 
 import hashlib
 import json
+import logging
 import uuid
+
+from hydra_agent.registry.infobase import Infobase
+
+
+logger = logging.getLogger("hydra.registry")
 
 
 class Registry:
 
     def __init__(self, user):
         self._user = user
+        self._digest = None
 
     @property
     def user_is_empty(self):
@@ -34,45 +41,28 @@ class Registry:
         return uuid.uuid4().hex if self.user_is_empty else self._user
 
     def list(self):
+        logger.info("Get infobase list for user: %s", self.user)
         # TODO: брать из списка опубликовых баз с учетом доступности пользователю
         ib = [
-            {
-                "id": "c0d2a8b2-df9e-445d-bd97-ff9ea0ae8653",
-                "name": "name1",
-                "url": "http://127.0.0.1/name1",
-                "order": 1001,
-                "folder": "/Folder",
-            },
-            {
-                "id": "ef1721db-0a3e-4c14-9c5a-5f0212ee1a14",
-                "name": "name2",
-                "url": "http://127.0.0.1/name2",
-                "order": 1002,
-                "folder": "/Folder",
-            },
+            Infobase("c0d2a8b2-df9e-445d-bd97-ff9ea0ae8653", "name1", "http://127.0.0.1/name1", 1001),
+            Infobase("ef1721db-0a3e-4c14-9c5a-5f0212ee1a14", "name2", "http://127.0.0.1/name2", 1002),
         ]
-        result = ""
-        for i in ib:
-            result = result + (f"[{i['name']}]\n"
-                               f'Connect=ws="{i["url"]}";\n'
-                               f'ID={i["id"]}\n'
-                               f'OrderInList={i["order"]}\n'
-                               f'Folder={i["folder"]}\n'
-                               f'OrderInTree={i["order"]}\n'
-                               "External=0\n"
-                               "ClientConnectionSpeed=Normal\n"
-                               "UseProxy=0\n"
-                               "App=Auto\n"
-                               "WA=1\n"
-                               "Version=8.3\n"
-                               "WSA=1\n")
-        return result
+        return "\n".join([i.v8i for i in ib])
 
+    @property
     def digest(self):
-        return hashlib.md5(json.dumps(self.list()).encode("utf-8")).hexdigest()
+        if not self._digest:
+            self.list()
+        return self._digest
 
     def verify(self, digest):
+        logger.info("Verify infobase list: current - %s, new - %s", digest, self.digest)
         if self._user == "00000000-0000-0000-0000-000000000000":
+            logger.info("Infobase list changed: %s", True)
             return True
         else:
-            return digest == self.digest()
+            logger.info("Infobase list changed: %s", digest != self.digest)
+            return digest != self.digest
+
+    def _set_digest(self):
+        self._digest = hashlib.md5(json.dumps(self.list()).encode("utf-8")).hexdigest()

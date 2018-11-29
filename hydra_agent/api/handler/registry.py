@@ -31,19 +31,24 @@ class RegistryHandler(BaseHandler):
 
     @staticmethod
     async def ok(request):
-        print("OK")
-        return aiohttp.web.Response(text="OK")
+        return aiohttp.web.Response()
 
     @staticmethod
     async def check(request):
-        print("check")
         user = request.rel_url.query["ClientID"]
         digest = request.rel_url.query["InfoBasesCheckCode"]
-        return aiohttp.web.json_response({"InfoBaseChanged": Registry(user).verify(digest)})
+
+        result = {
+            "root": {
+                "InfoBasesChanged": Registry(user).verify(digest),
+            }
+        }
+        return aiohttp.web.json_response(result)
 
     @staticmethod
     async def list(request):
-        print("list")
+        # return aiohttp.web.HTTPUnauthorized()
+
         user = request.rel_url.query["ClientID"]
 
         registry = Registry(user)
@@ -51,7 +56,7 @@ class RegistryHandler(BaseHandler):
         result = {
             "root": {
                 "ClientID": registry.user,
-                "InfoBasesCheckCode": registry.digest(),
+                "InfoBasesCheckCode": registry.digest,
                 "InfoBases": registry.list(),
             }
         }

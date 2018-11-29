@@ -15,11 +15,21 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import asyncio
+import logging
+import logging.config
 import optparse
+
+import yaml
 
 from hydra_agent import config
 from hydra_agent.api.main import run_server
 from hydra_agent.utils import is_windows
+
+
+def setup_logging():
+    with open("logger.yml") as f:
+        logging_settings = yaml.safe_load(f)
+    logging.config.dictConfig(logging_settings)
 
 
 def run():
@@ -32,6 +42,7 @@ def run():
         config.reload(path=options.config)
     if is_windows():
         asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
+    setup_logging()
     run_server()
 
 

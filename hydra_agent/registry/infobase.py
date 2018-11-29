@@ -15,10 +15,24 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from hydra_agent.config import Config
-from hydra_agent.rac import Rac
-from hydra_agent.ring import Ring
-from hydra_agent.ring.license_manager import LicenseManager
+class Infobase:
+    def __init__(self, infobase_id, name, url, order):
+        self.id = infobase_id
+        self.name = name
+        self.url = url
+        self.version = "8.3"
+        self.order = order
 
-
-config = Config()
+    @property
+    def v8i(self):
+        return "\n".join([
+            f"[{self.name}]",
+            f"ID={self.id}",
+            f"Connect=ws=\"{self.url}\";",
+            f"Version={self.version}",
+            "WA=1",
+            "WSA=1",
+            "App=Auto",
+            f"OrderInList={self.order}",
+            f"OrderInTree={self.order}",
+        ])
