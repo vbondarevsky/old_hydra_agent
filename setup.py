@@ -42,7 +42,8 @@ setup(
     python_requires=">=3",
     install_requires=[
         "pyyaml",
-        "aiohttp"
+        "aiohttp",
+        "networkx",
     ],
     zip_safe=True,
     entry_points={
