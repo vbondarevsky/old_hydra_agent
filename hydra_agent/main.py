@@ -18,6 +18,7 @@ import asyncio
 import logging
 import logging.config
 import optparse
+import os
 
 import yaml
 
@@ -27,7 +28,8 @@ from hydra_agent.utils import is_windows
 
 
 def setup_logging():
-    with open("logger.yml") as f:
+    current_dir = os.path.abspath(os.path.dirname(__file__))
+    with open(os.path.join(current_dir, "logger.yml")) as f:
         logging_settings = yaml.safe_load(f)
     logging.config.dictConfig(logging_settings)
 
