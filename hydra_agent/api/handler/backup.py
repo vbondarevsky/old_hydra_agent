@@ -17,7 +17,7 @@
 
 import aiohttp.web
 
-from hydra_agent.db import PostgreSQL
+from hydra_agent.dbms import PostgreSQL
 from hydra_agent.rac.cluster_manager import ClusterManager
 from hydra_agent.rac.infobase_manager import InfoBaseManager
 from hydra_agent.v8 import V8
