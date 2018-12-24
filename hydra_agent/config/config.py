@@ -18,10 +18,12 @@
 import yaml
 
 from hydra_agent.config.api_config import ApiConfig
+from hydra_agent.config.auth_config import AuthConfig
 from hydra_agent.config.postgresql_config import PostgreSQLConfig
 from hydra_agent.config.rac_config import RacConfig
 from hydra_agent.config.ring_config import RingConfig
 from hydra_agent.config.v8_config import V8Config
+
 
 try:
     from yaml import CLoader as Loader
@@ -47,6 +49,7 @@ class Config:
         self.api = self._api_config(config)
         self.v8 = self._v8_config(config)
         self.postgresql = self._postgresql_config(config)
+        self.auth = self._auth_config(config)
 
     @staticmethod
     def _rac_config(config):
@@ -110,6 +113,15 @@ class Config:
             user = config["postgresql"]["user"]
             password = config["postgresql"]["password"]
         return PostgreSQLConfig(path, user, password)
+
+    @staticmethod
+    def _auth_config(config):
+        user = ""
+        hash = ""
+        if "auth" in config:
+            user = config["auth"]["user"]
+            hash = config["auth"]["hash"]
+        return AuthConfig(user, hash)
 
     @staticmethod
     def _config(path, source):

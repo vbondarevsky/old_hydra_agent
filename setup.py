@@ -44,6 +44,7 @@ setup(
         "pyyaml",
         "aiohttp",
         "networkx",
+        "passlib",
     ],
     zip_safe=True,
     entry_points={

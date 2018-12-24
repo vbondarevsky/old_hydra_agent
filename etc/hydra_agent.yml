@@ -10,9 +10,17 @@ api:
   port: 9523
   debug: True
 v8:
-  path: C:\Program Files\1cv8\8.3.13.1513\bin
+  path: /opt/1cv8/8.3.13.1576 # C:\Program Files\1cv8\8.3.13.1513\bin
   display: 42
 postgresql:
   path: C:\Program Files\PostgreSQL 1C\10\bin
+  server: localhost
+  port: 5432
   user: postgres
   password:
+db:
+  schema: sqlite
+  name: hydra_agent
+auth:
+  user: test
+  hash: '$pbkdf2-sha256$29000$R6hVqjVmLOXc.5.T0loLwQ$YxoDZAV7h5uIICv3M2EVcwdGVPLqIxwZm6E3LWGKJxw' # test
