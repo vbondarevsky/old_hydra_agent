@@ -70,12 +70,18 @@ class V8:
         ]
         await self._run_designer(args)
 
-    async def run_data_processor(self, data_processor):
-        await self._run_enterprise(["/Execute", data_processor])
+    async def run_data_processor(self, data_processor, params=None):
+        args = ["/Execute", data_processor]
+        if params:
+            args.extend(["/C", params])
+        return await self._run_enterprise(args)
+
+    async def run_enterprise(self):
+        return await self._run_enterprise([])
 
     async def _run_designer(self, args):
         args.extend(["/IBConnectionString", str(self.connection_string)])
-        await self._run_command([
+        return await self._run_command([
             "DESIGNER",
             *args,
             "/DisableSplash",
@@ -85,7 +91,7 @@ class V8:
 
     async def _run_enterprise(self, args):
         args.extend(["/IBConnectionString", str(self.connection_string)])
-        await self._run_command([
+        return await self._run_command([
             "ENTERPRISE",
             *args,
             "/DisableSplash",
@@ -103,12 +109,10 @@ class V8:
         if self.access_code:
             args.extend(["/UC", self.access_code])
         log_file = temp_file_name()
-        print(log_file)
         env = os.environ.copy()
         if self.display:
             env["DISPLAY"] = str(self.display)
         result = await run_command_async([self.path, *args, "/Out", log_file], env)
         log = open(log_file).read()
-        print(log)
         os.remove(log_file)
-        return result
+        return result, log
