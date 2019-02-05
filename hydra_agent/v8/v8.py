@@ -21,6 +21,7 @@ from hydra_agent import config
 from hydra_agent.utils import is_windows
 from hydra_agent.utils.system import run_command_async
 from hydra_agent.utils.system import temp_file_name
+from hydra_agent.v8.server_connection_string import ServerConnectionString
 
 
 class V8:
@@ -35,9 +36,7 @@ class V8:
     async def save_db(self, out):
         await self._run_command([
             "DESIGNER",
-            "/S", f"{self.connection_string.server}\\{self.connection_string.name}",
-            "/N", str(self.connection_string.user),
-            "/P", str(self.connection_string.password),
+            *self._connection_string_to_args(),
             "/DumpIB", out,
             "/DisableSplash",
             "/DisableStartupDialogs",
@@ -80,9 +79,9 @@ class V8:
         return await self._run_enterprise([])
 
     async def _run_designer(self, args):
-        args.extend(["/IBConnectionString", str(self.connection_string)])
         return await self._run_command([
             "DESIGNER",
+            *self._connection_string_to_args(),
             *args,
             "/DisableSplash",
             "/DisableStartupDialogs",
@@ -90,9 +89,9 @@ class V8:
         ])
 
     async def _run_enterprise(self, args):
-        args.extend(["/IBConnectionString", str(self.connection_string)])
         return await self._run_command([
             "ENTERPRISE",
+            *self._connection_string_to_args(),
             *args,
             "/DisableSplash",
             "/DisableStartupDialogs",
@@ -116,3 +115,13 @@ class V8:
         log = open(log_file).read()
         os.remove(log_file)
         return result, log
+
+    def _connection_string_to_args(self):
+        if isinstance(self.connection_string, ServerConnectionString):
+            return [
+                "/S", f"{self.connection_string.server}\\{self.connection_string.name}",
+                "/N", str(self.connection_string.user),
+                "/P", str(self.connection_string.password),
+            ]
+        else:
+            return ["/IBConnectionString", str(self.connection_string)]
