@@ -1,4 +1,6 @@
-Cross-platform remote administration agent for 1C:Enterprise
+
+
+(!!Не развивается!!) Cross-platform remote administration agent for 1C:Enterprise
 =============
 |Build Status Travis| |Build Status AppVeyor| |Coverage Status| |PYPI| |License: GPL v3|
 
